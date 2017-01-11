@@ -9,7 +9,6 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<context:component-scan base-package="com.cases.controllers" />
 	<mvc:annotation-driven content-negotiation-manager="negomana" >
-		
 		<mvc:message-converters>
 			<bean class="com.cases.interceptors.MyHttpMessageConverter"></bean>
 		</mvc:message-converters>
@@ -18,13 +17,13 @@
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 	p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"  />
 
-
+	 <!--
 	<mvc:interceptors>
 		<bean class = "com.cases.interceptors.ResponseContentInterceptor"></bean> 
 
 	</mvc:interceptors>
 	
-	 <!--
+
 	<bean id="mainDataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" destroy-method="close"
 	p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://localhost:3306/ddsmaindb?useUnicode=true&amp;characterEncoding=utf-8" p:username="root" p:password="60f0ab7be5" />
 	<bean id="mainJDBCTemplate" class="org.springframework.jdbc.core.JdbcTemplate"

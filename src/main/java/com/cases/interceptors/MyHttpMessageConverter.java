@@ -52,7 +52,7 @@ public class MyHttpMessageConverter extends AbstractHttpMessageConverter {
 	}
 	
 	@Override
-	public List getSupportedMediaTypes() {
+	public List<MediaType> getSupportedMediaTypes() {
 		String contType = mtTL.get();
 		List<MediaType> list = new ArrayList<MediaType>();
 		if("json".equals(contType)){

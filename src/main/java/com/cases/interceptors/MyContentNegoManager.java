@@ -19,7 +19,7 @@ public class MyContentNegoManager extends ContentNegotiationManager {
 		super(convertToColl(strategies));
 		// TODO Auto-generated constructor stub
 	}
-
+ 
 	public MyContentNegoManager(ContentNegotiationStrategy... strategies) {
 		super(convertToColl(Arrays.asList(strategies)).toArray(new ContentNegotiationStrategy[0]));
 		// TODO Auto-generated constructor stub
