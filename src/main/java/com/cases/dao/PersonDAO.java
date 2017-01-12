@@ -71,7 +71,7 @@ public class PersonDAO {
 		return key;
 	}
 	public void updatePerson(final Person person){
-		String sql = "update persons (name, age) values(?, ?) where id = ?";
+		String sql = "update persons set name=? , age = ? where id = ?";
 		jdbcTemplate.update(sql, new PreparedStatementSetter(){
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {

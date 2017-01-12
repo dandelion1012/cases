@@ -46,5 +46,13 @@ public class PersonImpl implements PersonService {
 
 	}
 
+	@Override
+	public Person insertAndUpdateAge(Person p, int inc) {
+		insertPerson(p);
+		p.age += inc;
+		updatePerson(p);
+		return queryPersonByID(p.id);
+	}
+
 	
 }

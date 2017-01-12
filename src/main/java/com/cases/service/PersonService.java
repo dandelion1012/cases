@@ -10,4 +10,5 @@ public interface PersonService {
 	public List<Person> queryAllPerson();
 	public void deletePersonByID(int id);
 	public void updatePerson(Person p);
+	public Person insertAndUpdateAge(Person p,  int inc);
 }

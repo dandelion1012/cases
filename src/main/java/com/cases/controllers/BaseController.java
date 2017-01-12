@@ -51,5 +51,13 @@ public class BaseController {
 		personService.insertPerson(per);
 		return per;
 	}
-	
+	@RequestMapping(value="/insertAndUpdate/{name}/{age}/{inc}", produces="application/json;charse=utf-8" )
+	@ResponseBody
+	public Person insertAndUpdatePerson(@PathVariable String name, @PathVariable int age, @PathVariable int inc){
+		Person per = new Person();
+		per.name = name;
+		per.age = age;
+		personService.insertAndUpdateAge(per, inc);
+		return per;
+	}
 }
