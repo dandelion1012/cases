@@ -18,6 +18,9 @@
 			<bean class="com.cases.interceptors.MyHttpMessageConverter"></bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+	<mvc:interceptors>
+		<bean class="com.cases.interceptors.MyHandlerInterceptor"></bean>
+	</mvc:interceptors>
 	<bean id="negomana" class="com.cases.interceptors.MyContentNegoManager"/>
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 	p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"  />
