@@ -1,7 +1,6 @@
 package com.cases.interceptors;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +11,27 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.http.converter.xml.AbstractXmlHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 
-public class MyHttpMessageConverter extends AbstractHttpMessageConverter {
-	private MappingJacksonHttpMessageConverter mjhmc = new MappingJacksonHttpMessageConverter();
-	private Jaxb2RootElementHttpMessageConverter jrehmc = new Jaxb2RootElementHttpMessageConverter();
+public class MyHttpMessageConverter extends AbstractHttpMessageConverter<Object> {
+	private static class MyMappingJacksonHttpMessageConverter extends MappingJacksonHttpMessageConverter{
+		public Object publicRead(Class<?> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+			return super.readInternal(clazz, inputMessage);
+		}
+		public void publicWrite(Object object, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+			super.writeInternal(object, outputMessage);
+		}
+	}
+	private static class MyJaxb2RootElementHttpMessageConverter extends Jaxb2RootElementHttpMessageConverter{
+		public Object publicRead(Class<?> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+			return super.readInternal(clazz, inputMessage);
+		}
+		public void publicWrite(Object object, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+			super.writeInternal(object, outputMessage);
+		}
+	}
+	private MyMappingJacksonHttpMessageConverter mjhmc = new MyMappingJacksonHttpMessageConverter();
+	private MyJaxb2RootElementHttpMessageConverter jrehmc = new MyJaxb2RootElementHttpMessageConverter();
 	
 	private static ThreadLocal<String> mtTL = new ThreadLocal<String>();
 	
@@ -67,25 +81,10 @@ public class MyHttpMessageConverter extends AbstractHttpMessageConverter {
 	@Override
 	protected Object readInternal(Class clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 		String contType = mtTL.get();
-		Method m = null;
 		if("json".equals(contType)){
-			try {
-				m = mjhmc.getClass().getDeclaredMethod("readInternal", Class.class, HttpInputMessage.class);
-				m.setAccessible(true);
-				return m.invoke(mjhmc, clazz, inputMessage);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			mjhmc.publicRead(clazz, inputMessage);
 		}else if("xml".equals(contType)){
-			try {
-				m = jrehmc.getClass().getDeclaredMethod("readInternal", Class.class, HttpInputMessage.class);
-				m.setAccessible(true);
-				return m.invoke(jrehmc, clazz, inputMessage);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jrehmc.publicRead(clazz, inputMessage);
 		}
 		return null;
 		
@@ -94,25 +93,10 @@ public class MyHttpMessageConverter extends AbstractHttpMessageConverter {
 	@Override
 	protected void writeInternal(Object t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
 		String contType = mtTL.get();
-		Method m = null;
 		if("json".equals(contType)){
-			try {
-				m = mjhmc.getClass().getDeclaredMethod("writeInternal", Object.class, HttpOutputMessage.class);
-				m.setAccessible(true);
-				m.invoke(mjhmc, t, outputMessage);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			mjhmc.publicWrite(t, outputMessage);
 		}else if("xml".equals(contType)){
-			try {
-				m = AbstractXmlHttpMessageConverter.class.getDeclaredMethod("writeInternal", Object.class, HttpOutputMessage.class);
-				m.setAccessible(true);
-				m.invoke(jrehmc, t, outputMessage);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			jrehmc.publicWrite(t, outputMessage);
 		}
 
 	}

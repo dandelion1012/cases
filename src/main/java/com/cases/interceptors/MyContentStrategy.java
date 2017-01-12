@@ -12,7 +12,7 @@ public class MyContentStrategy implements ContentNegotiationStrategy {
 
 	@Override
 	public List<MediaType> resolveMediaTypes(NativeWebRequest webRequest) throws HttpMediaTypeNotAcceptableException {
-		String retrContentType = webRequest.getParameter("_con_type");
+		String retrContentType = webRequest.getParameter("_content_type");
 		if(retrContentType != null){
 			 MyHttpMessageConverter.setMTTL(retrContentType);
 		}
